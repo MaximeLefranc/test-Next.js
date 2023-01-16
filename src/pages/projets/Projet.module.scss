@@ -1,0 +1,21 @@
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 2rem 0 0.5rem 0;
+  transition: all 0.3s;
+  &.dark {
+    color: #98c1d9;
+    transition: all 0.3s;
+  }
+}
+
+.small {
+  color: #98c1d9;
+}
