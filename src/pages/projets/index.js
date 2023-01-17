@@ -1,5 +1,5 @@
 // Mongo
-import { MongoClient } from 'mongodb';
+import { connectToDatabase } from 'helpers/mongodb';
 
 // Component
 import CardProject from '@/components/CardProject/CardProject';
@@ -10,15 +10,20 @@ import style from './Projet.module.scss';
 export default function Projects({ darkMode, projects }) {
   // Constants
   const classDarkMode = darkMode ? style.dark : '';
-  console.log(projects);
 
   return (
     <>
       <h1 className={`${style.title} ${classDarkMode}`}>Mes Projets</h1>
       <div className={style.cards}>
-        <CardProject darkMode={darkMode} />
-        <CardProject darkMode={darkMode} />
-        <CardProject darkMode={darkMode} />
+        {projects.map((project) => (
+          <CardProject
+            key={project._id}
+            darkMode={darkMode}
+            slug={project.slug}
+            titre={project.titre}
+            description={project.description}
+          />
+        ))}
       </div>
     </>
   );
@@ -26,13 +31,9 @@ export default function Projects({ darkMode, projects }) {
 
 export async function getStaticProps() {
   let projects;
-  let client;
   try {
-    // Connexion à MongoDB
-    client = await MongoClient.connect(
-      'mongodb+srv://MaxLefranc:MaxLefranc@cluster0.n3gaejm.mongodb.net/portfolio?retryWrites=true&w=majority'
-    );
-    // Connexion à la DB
+    // Connexion
+    const client = await connectToDatabase();
     const db = client.db();
     // Récupérer les projets
     projects = await db.collection('projets').find().toArray();
