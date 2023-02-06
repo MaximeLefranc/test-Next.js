@@ -36,7 +36,13 @@ export default function Index({ darkMode, projects }) {
             </a>
           </p>
         </div>
-        <Image src={myPicture} alt='profil picture' className='main__picture' />
+        <Image
+          src={myPicture}
+          alt='profil picture'
+          width={200}
+          height={200}
+          className='main__picture'
+        />
       </div>
       <h2 className='main__title__projects'>Mes derrniers projets</h2>
       <div className='main__cards'>

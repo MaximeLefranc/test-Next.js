@@ -33,6 +33,9 @@ export default function Header({ darkMode, setDarkMode }) {
             <li className={style.header__div__nav__ul__li}>
               <Link href='/projets'>Projets</Link>
             </li>
+            <li className={style.header__div__nav__ul__li}>
+              <Link href='/ajouter'>Ajouter</Link>
+            </li>
           </ul>
         </nav>
       </div>
@@ -41,7 +44,11 @@ export default function Header({ darkMode, setDarkMode }) {
         type='button'
         onClick={handleDarkMode}
       >
-        <Image className={style.header__button__logo} src={logoDarkMode} alt='logo dark mode' />
+        <Image
+          className={style.header__button__logo}
+          src={logoDarkMode}
+          alt='logo dark mode'
+        />
       </button>
     </header>
   );
