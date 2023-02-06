@@ -48,6 +48,14 @@
       background-color: white;
       transition: all 0.3s;
     }
+    &__logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 1rem;
+      height: 1rem;
+    }
   }
   &.dark {
     transition: all 0.3s;

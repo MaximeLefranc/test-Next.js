@@ -1,12 +1,17 @@
 // Next
+import Image from 'next/image';
 import Link from 'next/link';
+
+// Logo
+import moon from '../../../../public/icons8-croissant-de-lune-50.png';
+import sun from '../../../../public/icons8-sun-star-48.png'
 
 // Style
 import style from './Header.module.scss';
 
 export default function Header({ darkMode, setDarkMode }) {
   // Constants
-  const logoDarkMode = darkMode ? '🌙' : '🌕';
+  const logoDarkMode = darkMode ? sun : moon;
   const classDarkMode = darkMode ? style.dark : '';
 
   // Methods
@@ -28,9 +33,6 @@ export default function Header({ darkMode, setDarkMode }) {
             <li className={style.header__div__nav__ul__li}>
               <Link href='/projets'>Projets</Link>
             </li>
-            <li className={style.header__div__nav__ul__li}>
-              <Link href='/apropos'>À porpos</Link>
-            </li>
           </ul>
         </nav>
       </div>
@@ -39,7 +41,7 @@ export default function Header({ darkMode, setDarkMode }) {
         type='button'
         onClick={handleDarkMode}
       >
-        {logoDarkMode}
+        <Image className={style.header__button__logo} src={logoDarkMode} alt='logo dark mode' />
       </button>
     </header>
   );

@@ -8,7 +8,51 @@ body {
   &__title {
     font-size: 2rem;
     font-weight: bold;
-    margin: 2rem;
+    margin: 2rem 0;
+    &--secondary {
+      font-size: 1.5rem;
+      &--span {
+        font-weight: bold;
+        color: #98c1d9;
+      }
+    }
+    &__projects {
+      margin-top: 3rem;
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+  }
+  &__div {
+    border: 2px solid #98c1d9;
+    padding: 3rem;
+    border-radius: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 3rem;
+  }
+  &__description {
+    margin-top: 1rem;
+    line-height: 1.5rem;
+  }
+  &__picture {
+    width: 13rem;
+    height: 13rem;
+    border-radius: 50%;
+  }
+  &__link {
+    display: inline-block;
+    background-color: #98c1d9;
+    color: white;
+    padding: .5rem;
+    border-radius: .3rem;
+    margin-top: 1rem;
+  }
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.7rem;
+    margin-top: 1rem;  
   }
 }
 

@@ -1,3 +1,6 @@
+// Next.JS
+import Head from 'next/head';
+
 // Mongo
 import { connectToDatabase } from 'helpers/mongodb';
 
@@ -13,6 +16,9 @@ export default function Projects({ darkMode, projects }) {
 
   return (
     <>
+      <Head>
+        <title>Mes projets</title>
+      </Head>
       <h1 className={`${style.title} ${classDarkMode}`}>Mes Projets</h1>
       <div className={style.cards}>
         {projects.map((project) => (
@@ -36,7 +42,11 @@ export async function getStaticProps() {
     const client = await connectToDatabase();
     const db = client.db();
     // Récupérer les projets
-    projects = await db.collection('projets').find().toArray();
+    projects = await db
+      .collection('projets')
+      .find()
+      .sort({ annee: 'desc' })
+      .toArray();
   } catch (error) {
     projects = [];
   }
