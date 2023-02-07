@@ -4,6 +4,9 @@ import Head from 'next/head';
 // React-Hook-Form
 import { useForm } from 'react-hook-form';
 
+// Axios
+import axios from 'axios';
+
 //Styles
 import style from './Ajouter.module.scss';
 
@@ -18,7 +21,21 @@ export default function Add({ darkMode }) {
 
   // Methods
   const handleOnSubmit = (data) => {
-    console.log(data);
+    // Send the new project on next API
+    axios
+      .post('/api/projet', data)
+      .then((response) => {
+        if (response.status !== 201) {
+          console.log(
+            response.data.message || 'Une erreur est survenu dans l API'
+          );
+        } else {
+          console.log(response.data.message);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
   return (
     <>
