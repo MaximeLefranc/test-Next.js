@@ -36,6 +36,12 @@ export default function Header({ darkMode, setDarkMode }) {
             <li className={style.header__div__nav__ul__li}>
               <Link href='/ajouter'>Ajouter</Link>
             </li>
+            <li className={style.header__div__nav__ul__li}>
+              <Link href='/connexion'>Connexion</Link>
+            </li>
+            <li className={style.header__div__nav__ul__li}>
+              <Link href='/inscription'>Inscription</Link>
+            </li>
           </ul>
         </nav>
       </div>

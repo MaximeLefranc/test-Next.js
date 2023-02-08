@@ -1,5 +1,6 @@
 // Next.js
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 
 // React-Hook-Form
 import { useForm } from 'react-hook-form';
@@ -7,10 +8,23 @@ import { useForm } from 'react-hook-form';
 // Axios
 import axios from 'axios';
 
+// Spinner
+import { SpinnerDotted } from 'spinners-react';
+
+// Components
+import Error from '@/components/Error/Error';
+import Button from '@/components/Button/Button';
+
 //Styles
 import style from './Ajouter.module.scss';
 
-export default function Add({ darkMode }) {
+export default function Add({
+  darkMode,
+  isLoading,
+  setIsLoading,
+  error,
+  setError,
+}) {
   // Constants
   const classDarkMode = darkMode ? style.dark : '';
   const {
@@ -18,24 +32,25 @@ export default function Add({ darkMode }) {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const router = useRouter();
 
   // Methods
   const handleOnSubmit = (data) => {
-    // Send the new project on next API
-    axios
-      .post('/api/projet', data)
-      .then((response) => {
-        if (response.status !== 201) {
-          console.log(
-            response.data.message || 'Une erreur est survenu dans l API'
-          );
-        } else {
-          console.log(response.data.message);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    if (!isLoading) {
+      // Send the new project on next API
+      setIsLoading(true);
+      setError(null);
+      axios
+        .post('/api/projet', data)
+        .then((response) => {
+          setIsLoading(false);
+          router.replace(`/projets/${response.data.project.slug}`);
+        })
+        .catch((error) => {
+          setIsLoading(false);
+          setError(error.response.data.message || 'Une erreur est survenue');
+        });
+    }
   };
   return (
     <>
@@ -51,10 +66,9 @@ export default function Add({ darkMode }) {
             errors.annee ||
             errors.description ||
             errors.contenu) && (
-            <div className={style.error}>
-              Veuillez remplir tous les champs du formulaire
-            </div>
+            <Error message='Veuillez remplir tous les champs du formulaire' />
           )}
+          {error && <Error message={error} />}
           <form onSubmit={handleSubmit(handleOnSubmit)}>
             <p className={style.p}>
               <label className={style.label} htmlFor='titre'>
@@ -137,7 +151,18 @@ export default function Add({ darkMode }) {
               />
             </p>
             <div className={style.divButton}>
-              <button className={style.button}>Ajouter</button>
+              <Button>
+                {isLoading ? (
+                  <SpinnerDotted
+                    size={15}
+                    thickness={100}
+                    speed={100}
+                    color='#ffffff'
+                  />
+                ) : (
+                  'Ajouter'
+                )}
+              </Button>
             </div>
           </form>
         </main>

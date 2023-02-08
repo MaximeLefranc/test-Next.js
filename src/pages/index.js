@@ -83,5 +83,6 @@ export async function getStaticProps() {
     props: {
       projects: JSON.parse(JSON.stringify(projects)),
     },
+    revalidate: 60,
   };
 }
