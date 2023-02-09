@@ -1,10 +1,14 @@
+//Auth
+import { signOut, useSession } from 'next-auth/client';
+
 // Next
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 // Logo
 import moon from '../../../../public/icons8-croissant-de-lune-50.png';
-import sun from '../../../../public/icons8-sun-star-48.png'
+import sun from '../../../../public/icons8-sun-star-48.png';
 
 // Style
 import style from './Header.module.scss';
@@ -13,10 +17,17 @@ export default function Header({ darkMode, setDarkMode }) {
   // Constants
   const logoDarkMode = darkMode ? sun : moon;
   const classDarkMode = darkMode ? style.dark : '';
+  const router = useRouter();
+  const [session, loading] = useSession();
 
   // Methods
   const handleDarkMode = () => {
     setDarkMode(!darkMode);
+  };
+
+  const handleLogOut = () => {
+    signOut();
+    router.push('/');
   };
 
   return (
@@ -33,15 +44,29 @@ export default function Header({ darkMode, setDarkMode }) {
             <li className={style.header__div__nav__ul__li}>
               <Link href='/projets'>Projets</Link>
             </li>
-            <li className={style.header__div__nav__ul__li}>
-              <Link href='/ajouter'>Ajouter</Link>
-            </li>
-            <li className={style.header__div__nav__ul__li}>
-              <Link href='/connexion'>Connexion</Link>
-            </li>
-            <li className={style.header__div__nav__ul__li}>
-              <Link href='/inscription'>Inscription</Link>
-            </li>
+            {!session && !loading && (
+              <>
+                <li className={style.header__div__nav__ul__li}>
+                  <Link href='/connexion'>Connexion</Link>
+                </li>
+                <li className={style.header__div__nav__ul__li}>
+                  <Link href='/inscription'>Inscription</Link>
+                </li>
+              </>
+            )}
+            {session && session.user.roles.includes('administrateur') && (
+              <li className={style.header__div__nav__ul__li}>
+                <Link href='/ajouter'>Ajouter</Link>
+              </li>
+            )}
+            {session && (
+              <li
+                onClick={handleLogOut}
+                className={style.header__div__nav__ul__li}
+              >
+                Déconnexion
+              </li>
+            )}
           </ul>
         </nav>
       </div>

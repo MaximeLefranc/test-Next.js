@@ -1,3 +1,6 @@
+// Auth
+import { getSession } from 'next-auth/client';
+
 // Next
 import CardProject from '@/components/CardProject/CardProject';
 import Image from 'next/image';
@@ -5,18 +8,19 @@ import Head from 'next/head';
 
 // Picture
 import myPicture from '../../public/max.jpg';
-import Projects from './projets';
 
 // Mongo DB
 import { connectToDatabase } from 'helpers/mongodb';
 
-export default function Index({ darkMode, projects }) {
+export default function Index({ darkMode, projects, user }) {
   return (
     <main className='main'>
       <Head>
         <title>Le portfolio d&apos;un développeur (Maxime)</title>
       </Head>
-      <h1 className='main__title'>Bienvenue sur mon portfolio</h1>
+      <h1 className='main__title'>
+        {user ? `Bienvenue ${user.name}` : 'Bienvenue sur mon portfolio'}
+      </h1>
       <div className='main__div'>
         <div>
           <h2 className='main__title--secondary'>
@@ -60,9 +64,15 @@ export default function Index({ darkMode, projects }) {
   );
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps(context) {
   // Variables
   let projects;
+  const session = await getSession({ req: context.req });
+  let user = null;
+
+  if (session) {
+    user = session.user;
+  }
 
   try {
     // Connection to MongoDB
@@ -82,7 +92,7 @@ export async function getStaticProps() {
   return {
     props: {
       projects: JSON.parse(JSON.stringify(projects)),
+      user: user,
     },
-    revalidate: 60,
   };
 }

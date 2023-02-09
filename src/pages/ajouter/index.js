@@ -1,3 +1,6 @@
+//Auth
+import { getSession } from 'next-auth/client';
+
 // Next.js
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -7,9 +10,6 @@ import { useForm } from 'react-hook-form';
 
 // Axios
 import axios from 'axios';
-
-// Spinner
-import { SpinnerDotted } from 'spinners-react';
 
 // Components
 import Error from '@/components/Error/Error';
@@ -151,22 +151,32 @@ export default function Add({
               />
             </p>
             <div className={style.divButton}>
-              <Button>
-                {isLoading ? (
-                  <SpinnerDotted
-                    size={15}
-                    thickness={100}
-                    speed={100}
-                    color='#ffffff'
-                  />
-                ) : (
-                  'Ajouter'
-                )}
-              </Button>
+              <Button text='Ajouter' isLoading={isLoading} />
             </div>
           </form>
         </main>
       </section>
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  const session = await getSession({ req: context.req });
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/connexion',
+        permanent: false,
+      },
+    };
+  }
+  if (session && !session.user.roles.includes('administrateur')) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+  return { props: { session } };
 }

@@ -1,16 +1,27 @@
+// Auth
+import { signIn, getSession } from 'next-auth/client';
+
 // Next
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 
 // React Hook Form
 import { useForm } from 'react-hook-form';
 
 // Component
 import Button from '@/components/Button/Button';
+import Error from '@/components/Error/Error';
 
 // Style
 import style from './Connexion.module.scss';
 
-export default function Connection({ darkMode }) {
+export default function Connection({
+  darkMode,
+  isLoading,
+  setIsLoading,
+  error,
+  setError,
+}) {
   // Constants
   const classDarkMode = darkMode ? style.dark : '';
   const {
@@ -18,10 +29,27 @@ export default function Connection({ darkMode }) {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const router = useRouter();
 
   // Methods
-  const handleSubmitAuthent = (data) => {
-    console.log(data);
+  const handleSubmitAuthent = async (data) => {
+    setIsLoading(true);
+    setError(null);
+
+    const result = await signIn('credentials', {
+      email: data.email,
+      password: data.password,
+      redirect: false,
+    });
+
+    setIsLoading(false);
+
+    if (result.error) {
+      setError(result.error);
+    } else {
+      console.log(result);
+      router.replace('/');
+    }
   };
 
   return (
@@ -32,6 +60,7 @@ export default function Connection({ darkMode }) {
       <h1 className={style.title}>Connexion</h1>
       <section className={style.section}>
         <main className={`${style.container} ${classDarkMode}`}>
+          {error && <Error message={error} />}
           <form
             onSubmit={handleSubmit(handleSubmitAuthent)}
             className={style.container__form}
@@ -83,11 +112,28 @@ export default function Connection({ darkMode }) {
               )}
             </p>
             <div className={style.container__form__divButton}>
-              <Button>Connexion</Button>
+              <Button text='Connexion' isLoading={isLoading} />
             </div>
           </form>
         </main>
       </section>
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  const session = await getSession({ req: context.req });
+
+  if (session) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: { session },
+  };
 }

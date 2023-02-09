@@ -1,3 +1,6 @@
+// Hash password
+import { hashPassword } from 'helpers/auth';
+
 // Mongo DB
 import { connectToDatabase } from 'helpers/mongodb';
 
@@ -25,11 +28,14 @@ export default async function handler(req, res) {
       return;
     }
 
+    // Hashed password
+
     // Save the new user
     const newUser = {
       email,
       pseudo,
-      password,
+      password: await hashPassword(password),
+      roles: ['utilisateur'],
       created_at: new Date(),
     };
 

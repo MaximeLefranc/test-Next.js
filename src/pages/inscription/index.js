@@ -1,3 +1,6 @@
+// Auth
+import { getSession } from 'next-auth/client';
+
 // Component
 import Button from '@/components/Button/Button';
 import Error from '@/components/Error/Error';
@@ -138,7 +141,7 @@ export default function Inscription({
                 )}
               </p>
               <div className={style.container__form__divButton}>
-                <Button>Inscription</Button>
+                <Button text='Inscription' isLoading={isLoading} />
               </div>
             </form>
           )}
@@ -146,4 +149,21 @@ export default function Inscription({
       </section>
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  const session = await getSession({ req: context.req });
+
+  if (session) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: { session },
+  };
 }
