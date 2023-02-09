@@ -1,5 +1,5 @@
 // Auth
-import { getSession } from 'next-auth/client';
+import { getSession, signOut } from 'next-auth/client';
 
 // Next
 import CardProject from '@/components/CardProject/CardProject';
@@ -8,11 +8,43 @@ import Head from 'next/head';
 
 // Picture
 import myPicture from '../../public/max.jpg';
+import trash from '../../public/trash.png';
 
 // Mongo DB
 import { connectToDatabase } from 'helpers/mongodb';
 
-export default function Index({ darkMode, projects, user }) {
+// Spinner
+import { SpinnerDotted } from 'spinners-react';
+
+// Axios
+import axios from 'axios';
+
+export default function Index({
+  darkMode,
+  projects,
+  user,
+  isLoading,
+  setIsLoading,
+  setError,
+}) {
+  // Methods
+  const handleDeleteProfile = () => {
+    if (!isLoading) {
+      setIsLoading(true);
+      console.log(isLoading);
+      setError(null);
+      axios
+        .delete('/api/user/delete')
+        .then((response) => {
+          signOut();
+        })
+        .catch((error) => {
+          setError('Une erreur est survenue');
+        });
+      setIsLoading(false);
+    }
+  };
+
   return (
     <main className='main'>
       <Head>
@@ -24,8 +56,8 @@ export default function Index({ darkMode, projects, user }) {
       <div className='main__div'>
         <div>
           <h2 className='main__title--secondary'>
-            Je m&apos;appelle{' '}
-            <span className='main__title--secondary--span'>Maxime</span>
+            Je m&apos;appelle
+            <span className='main__title--secondary--span'> Maxime</span>
           </h2>
           <p className='main__description'>
             Je suis développeur Front-end spécialisé en React et Next.js.
@@ -38,6 +70,27 @@ export default function Index({ darkMode, projects, user }) {
             <a className='main__link' href='mailto:maxilefranc@gmail.com'>
               Contactez-moi !
             </a>
+            {user && (
+              <button className='main__button' onClick={handleDeleteProfile}>
+                {isLoading ? (
+                  <SpinnerDotted
+                    size={15}
+                    thickness={100}
+                    speed={100}
+                    color='#ffffff'
+                  />
+                ) : (
+                  <Image
+                    src={trash}
+                    alt='trash icon'
+                    width={15}
+                    height={15}
+                    className='main__trash'
+                  />
+                )}
+                Supprimer mon profil
+              </button>
+            )}
           </p>
         </div>
         <Image

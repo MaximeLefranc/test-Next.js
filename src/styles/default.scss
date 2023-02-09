@@ -45,6 +45,19 @@ body {
     padding: .5rem;
     border-radius: .3rem;
     margin-top: 1rem;
+    margin-right: 1rem;
+  }
+  &__button {
+    background-color: #ee6c4d;
+    color: white;
+    border: none;
+    padding: .5rem;
+    border-radius: .3rem;
+    font-size: 0.8rem;
+  }
+  &__trash {
+    margin-right: .5rem;
+    vertical-align:bottom;
   }
   &__cards {
     display: grid;
