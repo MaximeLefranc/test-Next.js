@@ -68,7 +68,6 @@ export async function getStaticPaths() {
       client: path,
     },
   }));
-  console.log(dynamicPaths);
   return {
     paths: dynamicPaths,
     fallback: false,

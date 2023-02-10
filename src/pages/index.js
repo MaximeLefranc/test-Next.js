@@ -31,7 +31,6 @@ export default function Index({
   const handleDeleteProfile = () => {
     if (!isLoading) {
       setIsLoading(true);
-      console.log(isLoading);
       setError(null);
       axios
         .delete('/api/user/delete')

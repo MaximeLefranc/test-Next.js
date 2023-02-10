@@ -44,7 +44,6 @@ export default function Inscription({
       axios
         .post('/api/inscription', data)
         .then((response) => {
-          console.log(response);
           setIsLoading(false);
           setIsRegistered(response.data.user);
         })

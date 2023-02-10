@@ -47,7 +47,6 @@ export default function Connection({
     if (result.error) {
       setError(result.error);
     } else {
-      console.log(result);
       router.replace('/');
     }
   };
