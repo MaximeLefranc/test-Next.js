@@ -64,6 +64,8 @@ export default function Index({
             J&apos;ai aussi de bonnes notions en Back-end avec des connaissances
             en PHP, Symfony, MySQL et MongoDB.
             <br />
+            Projet réalisé afin de tester et découvrir Next.JS.
+            <br />
             Envie de collaborer avec moi?
           </p>
           <p>
